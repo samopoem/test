@@ -1,7 +1,5 @@
 #define _NO_CRT_SECURE_WARNINS
 
-
-// 기출문제
 #include  <stdio.h>
 int N;
 int a[7 + 10][7 + 10];
