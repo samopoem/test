@@ -82,7 +82,7 @@ void DFS(int n, int m)
 		return;
 	}
 
-	if (n >= 4) {
+	if (n > 4) {
 		return;
 
 	}
