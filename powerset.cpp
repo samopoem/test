@@ -1,6 +1,6 @@
 
 
-// »ùÇÃ
+// ìƒ˜í”Œ
 #if 0
 #include <stdio.h>
 int main()
@@ -10,7 +10,7 @@ int main()
 #endif
 
 
-// 2020 Problem  D [TST]°í±âÀâÀÌ 
+// 2020 Problem  D [TST]ê³ ê¸°ì¡ì´ 
 #if 0
 #include <stdio.h>
 int N, L, M;
@@ -31,20 +31,20 @@ int main()
 	int max = -1;
 
 
-	// ÁÂÇ¥ ÀÌµ¿
+	// ì¢Œí‘œ ì´ë™
 	for (int i = 1; i <= M; i++)
 	{
 		for (int j = 1; j <= M; j++)
 		{
 
-			// ±×¹° »çÀÌÁî º¯°æ
+			// ê·¸ë¬¼ ì‚¬ì´ì¦ˆ ë³€ê²½
 			for (int w = 1; w <= L / 2; w++)
 			{
 				int h = L / 2 - w;
 
 
 				int cnt = 0;
-				// °í±â À§Ä¡ ÇÏ³ª¾¿ ²¨³¿
+				// ê³ ê¸° ìœ„ì¹˜ í•˜ë‚˜ì”© êº¼ëƒ„
 				for (int k = 0; k < M; k++)
 				{
 					if ((j <= Q[k].x && Q[k].x <= (j + w)) &&
@@ -64,7 +64,7 @@ int main()
 }
 #endif
 
-// 2139 Problem  C [TST]¿¹»ê 
+// 2139 Problem  C [TST]ì˜ˆì‚° 
 #if 0
 #include <stdio.h>
 int N;
@@ -296,9 +296,30 @@ int selected[10];
 int N = 3;
 
 
-void powerset(int depth, int starti)
+int powerset(int depth,int starti)
 {
-	
+    int i;
+
+    if( starti >= N ){
+        printf("[");
+        for(i=0;i<N;i++){
+            if( flag[i]!=0 ){
+                printf("%d ",data[i]);
+            }
+        }
+        printf("]\n");
+        return 0;
+    }
+
+
+    for(i=starti;i<N;i++){
+        flag[i] = 1;
+        powerset(depth+1,i+1);
+        flag[i] = 0;
+    }
+    powerset(depth+1,i+1);
+
+    return 0;
 }
 
 void powerset2(int depth, int starti)
