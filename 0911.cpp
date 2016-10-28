@@ -667,12 +667,19 @@ int main(void)
  return 0;
 }
 #endif
-================================================================
-정현수  Jung, Hyunsoo  
-삼성전자 생산기술연구소 TP기술팀
-Test & Package tech. Team, Manufacturing Tech. Center / Samsung Electronics Co.Ltd.
-Mobile: +82-10-5069-1891  E-mail : hs2010.jung@samsung.com
-================================================================
+ }
+ printf("%d %d", max_row, max_col);
+ return 0;
+}
+#endif
+// 
+#if 0
+#include <stdio.h>
+int main(void)
+{
+ return 0;
+}
+#endif
  
  
 
