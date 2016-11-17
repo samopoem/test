@@ -1,0 +1,56 @@
+#include <stdio.h>
+
+//#define REPEAT
+
+int T[10]; //nPr을 이루는 각각의 경우를 저장
+int data[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+void swap(int *i, int *j)
+{
+    int temp = *i;
+    *i = *j;
+    *j = temp;
+}
+
+void process(int q)
+{
+    int i;
+    for(i = q-1; i>= 0; i--)
+    {
+        printf("%d ", T[i]);
+    }
+    printf("\n");
+}
+
+void Comb(int n, int r, int q)
+{
+    if(r == 0)
+    {
+        process(q);
+        return;
+    }
+#ifdef REPEAT
+    else if(n == 0)
+#else
+    else if(n<r)
+#endif
+    {
+        return;
+    }
+    else
+    {  //loop이 아님
+        T[r-1] = data[n-1];
+#ifdef REPEAT
+        Comb(n, r-1, q);
+#else
+        Comb(n-1, r-1, q);  //n-1Cr-1
+#endif
+        Comb(n-1, r, q);    //n-1Cr
+    }
+}
+
+int main(void)
+{
+    Comb(4, 3, 3);
+    return 0;
+}
