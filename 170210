@@ -1,0 +1,93 @@
+#include <stdio.h>
+int arr[5] = { 1, 2, 3, 4, 5};
+int t[5];
+void swap(int i, int j)
+{
+	int t = arr[i];
+	arr[i] = arr[j];
+	arr[j] = t;
+}
+
+void process(int q)
+{
+	for (int i = 0; i < q; i++)
+	{
+		printf("%d ", t[i]);
+	}
+	printf("\n");
+}
+
+//void perm(int n, int k)
+//{
+//	if (n == k) process(int q);
+//
+//	for (int i = k; i < n; i++)
+//	{
+//		swap(k, i);
+//		perm(n, k + 1);
+//		swap(k, i);
+//	}
+//}
+
+void perm2(int n, int r, int q)
+{
+	if ( r == 0 ) process(q);
+	else
+	{
+		for (int i = n - 1; i >= 0; i--)
+		{
+			swap(n-1, i);
+			t[r - 1] = arr[n - 1];
+			perm2(n - 1, r - 1, q);
+			swap(n-1, i);
+		}
+	}
+}
+
+void PI(int n, int r, int q)
+{
+	if (r == 0) process(q);
+	else
+	{
+		for (int i = n - 1; i >= 0; i--)
+		{
+			swap(n - 1, i);
+			t[r - 1] = arr[n - 1];
+			PI(n, r - 1, q);
+			swap(n - 1, i);
+		}
+	}
+}
+
+void comb(int n, int r, int q)
+{
+	if (r == 0) process(q);
+	else if (r > n) return;
+	else
+	{
+		t[r - 1] = arr[n - 1];
+		comb(n - 1, r - 1, q);
+		comb(n - 1, r, q);
+	}	
+}
+
+void H(int n, int r, int q)
+{
+	if (r == 0) process(q);
+	else if (n == 0) return;
+	else
+	{
+		t[r - 1] = arr[n - 1];
+		H(n, r - 1, q);
+		H(n - 1, r, q);
+	}
+}
+int main()
+{	
+	//perm(3, 0); // n,k
+	//perm2(3,3,3); // n,r,k
+	//PI(3, 3, 3); //n,r,k
+	//comb(3, 2, 2);
+	H(3, 2, 2);
+	return 0;
+}
