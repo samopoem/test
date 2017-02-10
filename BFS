@@ -1,0 +1,460 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define Q_SIZE 100
+
+int queue[Q_SIZE];
+int front = -1, rear = -1;
+
+
+int isEmpty()      //큐가 공백인지 확인하는 연산
+{
+	if (front == rear) {
+		printf("\n Queue is empty! \n");
+		return 1;
+	}
+	else return 0;
+}
+
+int isFull()       //큐가 포화상태인지 확인하는 연산
+{
+	if (rear == Q_SIZE - 1) {
+		printf("\n Queue is full! \n");
+		return 1;
+	}
+	else return 0;
+}
+
+void enQueue(int item)   //큐의 rear에 원소를 삽입하는 연산
+{
+	if (isFull()) exit(1);
+	else {
+		rear++;
+		queue[rear] = item;
+	}
+}
+
+int deQueue()    //큐의 front에서 원소를 삭제하고 반환하는 연산
+{
+	if (isEmpty()) exit(1);
+	else {
+		front++;
+		return queue[front];
+	}
+}
+
+int peek()   //큐의 가장 앞에 있는 원소를 검색하여 반환하는 연산
+{
+	if (isEmpty()) exit(1);
+	else return queue[front + 1];
+}
+
+void printQ()    //큐의 내용을 출력하는 연산
+{
+	int i;
+	printf(" Queue : [");
+	for (i = front + 1; i <= rear; i++)
+		printf("%3d", queue[i]);
+	printf(" ] \n");
+}
+
+void main(void)
+{
+	int data;
+	printf("enQ 1 >>");  enQueue(1); printQ();
+	printf("enQ 2 >>");  enQueue(2); printQ();
+	printf("enQ 3 >>");  enQueue(3); printQ();
+
+	printf("deQ   >>");  data = deQueue(); printf(" %d\n", data);
+	printf("deQ   >>");  data = deQueue(); printf(" %d\n", data);
+	printf("deQ   >>");  data = deQueue(); printf(" %d\n", data);
+
+}
+//인접정점의 배열
+#if 1
+#include <stdio.h>
+#include <stdlib.h>
+#define Q_SIZE 100
+#define MAX_DEGREE 6	   //최대차수 (V-1)
+int queue[100];
+int front = -1, rear = -1;
+//int G[8][3] = {
+//	{ 0, 0, 0 },
+//	{ 2, 3, 0 },   // 정점 1의 인접정점
+//	{ 1, 4, 5 },   // 정점 2의 인접정점
+//	{ 1, 7, 0 },   // 정점 3의 인접정점
+//	{ 2, 6, 0 },   // 정점 4의 인접정점
+//	{ 2, 6, 0 },   // 정점 5의 인접정점
+//	{ 4, 5, 7 },   // 정점 6의 인접정점
+//	{ 3, 6, 0 } };  // 정점 7의 인접정점
+
+int G[8][MAX_DEGREE];
+int visited[8];
+
+int isEmpty()      //큐가 공백인지 확인하는 연산
+{
+	if (front == rear) {
+		printf("\n Queue is empty! \n");
+		return 1;
+	}
+	else return 0;
+}
+
+int isFull()       //큐가 포화상태인지 확인하는 연산
+{
+	if (rear == Q_SIZE - 1) {
+		printf("\n Queue is full! \n");
+		return 1;
+	}
+	else return 0;
+}
+
+void enQueue(int item)   //큐의 rear에 원소를 삽입하는 연산
+{
+	if (isFull()) exit(1);
+	else {
+		rear++;
+		queue[rear] = item;
+	}
+}
+
+int deQueue()    //큐의 front에서 원소를 삭제하고 반환하는 연산
+{
+	if (isEmpty()) exit(1);
+	else {
+		front++;
+		return queue[front];
+	}
+}
+
+int peek()   //큐의 가장 앞에 있는 원소를 검색하여 반환하는 연산
+{
+	if (isEmpty()) exit(1);
+	else return queue[front + 1];
+}
+
+void printQ()    //큐의 내용을 출력하는 연산
+{
+	int i;
+	printf(" Queue : [");
+	for (i = front + 1; i <= rear; i++)
+		printf("%3d", queue[i]);
+	printf(" ] \n");
+}
+
+void BFS( int v)
+{
+	int t, u;
+
+	enQueue(v);
+	visited[v] = 1;   		// 정점 v의 방문 표시 
+	printf("%d ", v);   	// 방문한 정점 출력 
+
+	while (!isEmpty()){
+		t = deQueue();
+
+		for (int i = 0; i < MAX_DEGREE; i++){
+			u = G[t][i];
+			if (u != 0 && !visited[u]){
+				enQueue(u);
+				visited[u] = 1;
+				printf("%d ", u);   	// 방문한 정점 출력 
+			}
+		}
+	}
+
+}
+
+////////////////////////////
+///  day4 실습2 : 미로1 //
+////////////////////////////
+#include <stdio.h>
+#define N 16
+int map[N][N];
+
+int flag;
+void findStart(int *sy, int *sx)
+{
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			if (map[i][j] == 2){
+				*sy = i;
+				*sx = j;
+				return;
+			}
+}
+
+void DFS(int startY, int startX)
+{
+	int x, y, curx, cury;   
+
+	int dx[4] = { 0, 0, -1, 1 }; // 상하좌우
+	int dy[4] = { -1, 1, 0, 0 };
+
+	y = startY; x = startX;	//시작좌표
+	map[y][x] = 9;	//방문표시
+
+	for (int i = 0; i< 4; i++) { //상하좌우 탐색
+		curx = x + dx[i];
+		cury = y + dy[i];
+
+		if (map[cury][curx] == 3){		//도착점 찾았으면
+			flag = 1;
+			return;
+		}
+		if (cury < 0 || cury == N)		continue;
+		if (curx < 0 || curx == N)		continue;
+		if (map[cury][curx] == 9)		continue;
+		if (map[cury][curx] == 1)		continue;
+
+		DFS(cury, curx);
+	}
+}
+
+
+int main(){
+
+	int i, j, no, sy, sx;
+
+	freopen("maze1_input.txt", "r", stdin);
+
+	for (int T = 1; T <= 10; T++){
+		scanf("%d", &no);
+		for (i = 0; i < N; i++){
+			for (j = 0; j < N; j++){
+				scanf("%1d", &map[i][j]);
+			}
+		}
+
+		
+		findStart(&sy, &sx);
+		
+		flag = 0;	//결과값 초기화		
+		DFS(sy, sx);	//출발점 셋팅
+
+		printf("#%d %d\n", no, flag);
+
+	}
+	return 0;
+
+}
+
+
+미로1
+#1 1
+#2 1
+#3 1
+#4 0
+#5 1
+#6 1
+#7 0
+#8 1
+#9 1
+#10 1
+////////////////////////////
+///  day4실습3 : 미로2
+////////////////////////////
+#include <stdio.h>
+#define N 100
+int map[N][N];
+
+int queueX[N*N];
+int queueY[N*N];
+
+int front = -1;                // 큐의 초기값
+int rear = -1;
+
+void findStart(int *sy, int *sx)
+{
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			if (map[i][j] == 2){
+				*sy = i;
+				*sx = j;
+				return;
+			}
+}
+
+int BFS()
+{
+	int sum = 0, x, y, curx, cury;
+
+	int dx[4] = { 0, 0, -1, 1 }; // 상하좌우
+	int dy[4] = { -1, 1, 0, 0 };
+
+	y = 1; x = 1;	//시작좌표
+	map[y][x] = 9;	//방문표시
+
+	//enQueue
+	rear++;
+	queueY[rear] = y;
+	queueX[rear] = x;
+
+	while (front != rear){
+		//deQueue
+		front++;
+		y = queueY[front];
+		x = queueX[front];
+
+
+		for (int i = 0; i < 4; i++) { //상하좌우 탐색
+			curx = x + dx[i];
+			cury = y + dy[i];
+
+			if (map[cury][curx] == 3)		return 1;
+			if (cury < 0 || cury == N)		continue;
+			if (curx < 0 || curx == N)		continue;
+			if (map[cury][curx] == 9)		continue;
+			if (map[cury][curx] == 1)		continue;
+
+			map[cury][curx] = 9;	//방문표시	
+
+			//enQueue
+			rear++;
+			queueY[rear] = cury;
+			queueX[rear] = curx;
+		}
+	}
+	return 0;
+}
+
+
+int main(){
+
+	int i, j, no, sy, sx;
+
+	freopen("maze2_input.txt", "r", stdin);
+
+	for (int t = 1; t <= 10; t++){
+		scanf("%d", &no);
+		for (i = 0; i < N; i++){
+			for (j = 0; j < N; j++){
+				scanf("%1d", &map[i][j]);
+			}
+		}
+
+		front = -1;	//큐 초기화
+		rear = -1;
+		findStart(&sy, &sx);
+		printf("#%d %d\n", no, BFS());
+
+	}
+	return 0;
+
+}
+미로2
+#1 1
+#2 1
+#3 1
+#4 0
+#5 0
+#6 1
+#7 1
+#8 0
+#9 1
+#10 0
+#if 1
+#include <stdio.h>
+#define MAXINT 200000000
+int Q[MAXINT];
+int front, rear;
+
+int main()
+{
+	int no;
+	int temp;
+	int count;
+	freopen("암호생성기_input.txt", "r", stdin);
+
+	for (int T = 0; T < 10; T++)
+	{
+		scanf("%d", &no);
+		front = rear = -1;
+		
+		for (int i = 0; i < 8; i++){
+			scanf("%d", &temp);
+			Q[++rear] = temp;
+		}
+
+		count = 0;
+		temp = 0;
+		do
+		{
+			temp = Q[++front];
+			temp -= (count % 5 + 1);
+			if (temp < 0) 
+				temp = 0;
+			Q[++rear] = temp;
+			count++;
+		} while (temp > 0);
+
+
+		//출력
+		printf("#%d ", no);
+		for (int i = front + 1; i <= rear; i++)
+			printf("%d ", Q[i]);
+		printf("\n");
+		
+	}
+
+	return 0;
+}
+#endif
+
+#if 0
+#include <stdio.h>
+#define MAXINT 10
+int Q[MAXINT];
+int front, rear;
+
+int main()
+{
+	int no;
+	int temp;
+	int count;
+	freopen("암호생성기_input.txt", "r", stdin);
+
+	for (int T = 0; T < 10; T++)
+	{
+		scanf("%d", &no);
+		front = rear = 0;
+
+		for (int i = 0; i < 8; i++){
+			scanf("%d", &temp);
+			Q[++rear % 8] = temp;
+		}
+
+		count = 0;
+		temp = 0;
+		do
+		{
+			temp = Q[front=++front % 8];
+			temp -= (count % 5 + 1);
+			if (temp < 0)
+				temp = 0;
+			Q[rear= ++rear % 8] = temp;
+			count++;
+		} while (temp > 0);
+
+
+		//출력
+		printf("#%d ", no);
+		for (int i = 0 ; i <8; i++)
+			printf("%d ", Q[front=(++front)%8]);
+		printf("\n");
+
+	}
+	
+	return 0;
+}
+
+#endif
+암호생성기
+#1 6 2 2 9 4 1 3 0 
+#2 9 7 9 5 4 3 8 0 
+#3 8 7 1 6 4 3 5 0 
+#4 7 5 8 4 8 1 3 0 
+#5 3 8 7 4 4 7 4 0 
+#6  
+#9 4 7 8 1 2 8 4 0 
+#10 6 8 9 5 8 5 2 0 
+
