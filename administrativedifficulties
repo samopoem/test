@@ -1,0 +1,93 @@
+#include <stdio.h>
+
+int N, M;
+int TS;
+
+typedef struct {
+	char name[41];
+	int p;
+	int q;
+	int k;
+}CARS;
+
+CARS cars[500];
+
+typedef struct {
+	int num;
+	char name[41];
+	int incar;
+	int ok;
+	int cost;
+}SPY;
+SPY spy[500];
+
+int main(void) {
+	scanf("%d", &TS);
+	while (TS--) {
+		scanf("%d %d", &N, &M);
+		int num = 0;
+
+		for (int i = 0; i < N; i++)
+		{
+			scanf("%s %d %d %d", &cars[i].name, &cars[i].p, &cars[i].q, &cars[i].k);
+		}
+
+		int t;
+		char s[41];
+		char c;
+		for (int i = 0; i < M; i++)
+		{
+			scanf("%d %s %c", &t, &s, &c);
+
+			switch (c)
+			{
+			case 'p':
+				char car[41];
+				scanf("%s", car);
+				if (spy[s].incar)
+					spy[s].ok = false;
+				else {
+					spy[s].incar = true;
+					spy[s].name = car;
+					spy[s].cost += cars[car].q;
+				}
+				break;
+			case 'r':
+				int dist;
+				scanf("%d", dist);
+				if (!spy[s].incar)
+					spy[s].ok = false;
+				else {
+					spy[s].cost += cars[spy[s].name].k*dist;
+					spy[s].incar = false;
+				}
+				break;
+			case 'a':
+				int p;
+				scanf("%d", p);
+				if (!spy[s].incar)
+					spy[s].ok = false;
+				else if (p > 0) {
+					spy[s].cost += (cars[spy[s].name].p*p + 99) / 100;
+				}
+			default:
+				break;
+			}
+			
+		}
+
+		for (int i = 0; i < spy.length; i++)
+		{
+			if(spy)
+			{
+				printf("%d %d\n",spy[i].ok, spy[i].cost);
+			}
+			else {
+				printf("%d INCONSISTENT\n");
+			}
+		}
+
+	}
+	return 0;
+}
+
